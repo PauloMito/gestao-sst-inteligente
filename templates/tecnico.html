@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Técnico | Prestolabor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/adenilson.css') }}">
+  <script src="{{ url_for('static', filename='js/adenilson.js') }}" defer></script>
+</head>
+
+<body>
+  <header class="cabecalho">
+    <div class="cabecalho-conteudo">
+      <div>
+        <p class="identificacao">PRESTOLABOR · DEPARTAMENTO TÉCNICO</p>
+        <h1>Painel do Técnico</h1>
+        <p class="subtitulo">
+          Fila de vencimentos e acompanhamento das etapas de renovação dos serviços SST
+        </p>
+      </div>
+      <div class="responsavel">
+        <span class="responsavel-legenda">PAINEL OPERACIONAL</span>
+        <strong>Técnico responsável</strong>
+        <span>Disponibilização e devolução de correções</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="conteudo-principal">
+    <section class="periodo-painel">
+      <div class="periodo-titulo">
+        <span class="rotulo-secao">CONTROLE MENSAL</span>
+        <h2>Fila de vencimentos</h2>
+        <p>
+          Consulte as empresas com vencimento no período e execute somente as ações
+          permitidas ao técnico.
+        </p>
+      </div>
+
+      <div class="seletor-periodo">
+        <a class="navegacao-mes"
+          href="{{ url_for('painel_tecnico', mes=mes_anterior) }}"
+          aria-label="Consultar mês anterior" title="Mês anterior">&#8592;</a>
+
+        <form method="GET" action="{{ url_for('painel_tecnico') }}">
+          <label for="mes">Mês de referência</label>
+          <input type="month" id="mes" name="mes" value="{{ mes_selecionado }}" required>
+          <button type="submit" class="botao-periodo">Consultar</button>
+        </form>
+
+        <a class="navegacao-mes"
+          href="{{ url_for('painel_tecnico', mes=mes_proximo) }}"
+          aria-label="Consultar próximo mês" title="Próximo mês">&#8594;</a>
+      </div>
+    </section>
+
+    <section class="resumo-periodo" aria-label="Resumo do período">
+      <div class="resumo-principal">
+        <span class="resumo-legenda">CICLOS NA FILA</span>
+        <strong id="totalEmpresas">{{ empresas | length }}</strong>
+        <span class="resumo-descricao">com vencimento em {{ mes_legivel }}</span>
+      </div>
+
+      <div class="indicadores">
+        <article class="indicador indicador-disponivel">
+          <span class="indicador-legenda">TOTAL NO PERÍODO</span>
+          <strong>{{ indicadores.total }}</strong>
+          <span>Ciclos de atendimento</span>
+        </article>
+        <article class="indicador indicador-analise">
+          <span class="indicador-legenda">AGUARDANDO SUA POSIÇÃO</span>
+          <strong>{{ indicadores.aguardando }}</strong>
+          <span>Prontos para disponibilização</span>
+        </article>
+        <article class="indicador indicador-correcao">
+          <span class="indicador-legenda">AGUARDANDO CORREÇÃO</span>
+          <strong>{{ indicadores.aguardando_correcao }}</strong>
+          <span>Correções para devolver</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="legenda-status">
+      <div><span class="ponto-status ponto-disponivel"></span><span>Disponível para análise</span></div>
+      <div><span class="ponto-status ponto-analise"></span><span>Em análise ou reanálise</span></div>
+      <div><span class="ponto-status ponto-correcao"></span><span>Aguardando correção</span></div>
+      <div><span class="ponto-status ponto-concluida"></span><span>Avaliação concluída</span></div>
+    </section>
+
+    <section class="fila-section">
+      <div class="fila-cabecalho">
+        <div>
+          <span class="rotulo-secao">ACOMPANHAMENTO OPERACIONAL</span>
+          <h2>Empresas do período</h2>
+          <p>O status pertence ao ciclo daquele ano. Concluir um ano não altera os ciclos seguintes.</p>
+        </div>
+        <div class="contador-fila">
+          <strong id="quantidadeVisivel">{{ empresas | length }}</strong>
+          <span>registros exibidos</span>
+        </div>
+      </div>
+
+      <div class="filtros">
+        <div class="campo-busca">
+          <label for="buscaEmpresa">Localizar empresa</label>
+          <input type="search" id="buscaEmpresa"
+            placeholder="Nome, CNPJ, técnico ou unidade..." autocomplete="off">
+        </div>
+
+        <div class="campo-filtro">
+          <label for="filtroStatus">Filtrar por status</label>
+          <select id="filtroStatus">
+            <option value="">Todos os status</option>
+            <option value="Aguardando a posição do técnico">Aguardando a posição do técnico</option>
+            <option value="Disponível para análise">Disponível para análise</option>
+            <option value="Em análise">Em análise</option>
+            <option value="Aguardando correção">Aguardando correção</option>
+            <option value="Retorno da correção para análise">Retorno da correção para análise</option>
+            <option value="Em reanálise">Em reanálise</option>
+            <option value="Avaliação concluída, produção dos documentos liberada">Avaliação concluída</option>
+          </select>
+        </div>
+
+        <button type="button" id="limparFiltros" class="botao-limpar">Limpar filtros</button>
+      </div>
+
+      {% if empresas %}
+      <div class="tabela-container">
+        <table class="tabela-empresas">
+          <thead>
+            <tr>
+              <th>EMPRESA</th>
+              <th>VENCIMENTO</th>
+              <th>RESPONSÁVEL TÉCNICO</th>
+              <th>UNIDADE</th>
+              <th>STATUS ATUAL</th>
+              <th>AÇÕES DO TÉCNICO</th>
+            </tr>
+          </thead>
+          <tbody id="corpoTabela">
+            {% for empresa in empresas %}
+            <tr class="linha-empresa"
+              data-status="{{ empresa.status }}"
+              data-vencimento="{{ empresa.vencimento }}"
+              data-search="{{ empresa.nome }} {{ empresa.cnpj }} {{ empresa.tecnico }} {{ empresa.unidade }} {{ empresa.ano_referencia }}">
+              <td class="celula-empresa">
+                <strong class="nome-empresa">{{ empresa.nome }}</strong>
+                <span class="cnpj-empresa">CNPJ: {{ empresa.cnpj }}</span>
+                <span class="cnpj-empresa">Ciclo: {{ empresa.ano_referencia }}</span>
+              </td>
+
+              <td class="celula-vencimento">
+                <strong class="data-vencimento">
+                  {{ empresa.vencimento[8:10] }}/{{ empresa.vencimento[5:7] }}/{{ empresa.vencimento[0:4] }}
+                </strong>
+                <span class="situacao-vencimento">Vencimento do ciclo</span>
+              </td>
+
+              <td><span class="dado-principal">{{ empresa.tecnico }}</span></td>
+              <td><span class="dado-principal">{{ empresa.unidade }}</span></td>
+
+              <td class="celula-status">
+                <span class="status-badge">{{ empresa.status }}</span>
+              </td>
+
+              <td class="celula-acoes">
+                {% if empresa.status == STATUS_1 %}
+                <form class="form-acao"
+                  action="{{ url_for('tecnico_disponibilizar', ciclo_id=empresa.ciclo_id) }}"
+                  method="POST" data-confirmacao="Disponibilizar para análise">
+                  <input type="hidden" name="mes" value="{{ mes_selecionado }}">
+                  <button type="submit" class="botao-acao" data-acao="disponibilizar">
+                    Disponibilizar para análise
+                  </button>
+                </form>
+                {% elif empresa.status == STATUS_4 %}
+                <form class="form-acao"
+                  action="{{ url_for('tecnico_devolver_correcao', ciclo_id=empresa.ciclo_id) }}"
+                  method="POST" data-confirmacao="Devolver correção para análise">
+                  <input type="hidden" name="mes" value="{{ mes_selecionado }}">
+                  <button type="submit" class="botao-acao" data-acao="devolver_correcao">
+                    Devolver correção para análise
+                  </button>
+                </form>
+                {% else %}
+                <span class="sem-acao">Nenhuma ação disponível nesta etapa</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div id="mensagemSemResultados" class="mensagem-vazia" hidden>
+        <strong>Nenhuma empresa encontrada</strong>
+        <p>Não há registros que correspondam aos filtros aplicados.</p>
+      </div>
+      {% else %}
+      <div class="mensagem-vazia">
+        <span class="icone-vazio">&#128197;</span>
+        <strong>Nenhum ciclo de atendimento neste mês</strong>
+        <p>
+          Não existem empresas com vencimento em {{ mes_legivel }}. Se uma empresa tiver
+          vencimento-base em novembro de 2027, o ciclo inicial aparecerá ao consultar novembro de 2027.
+        </p>
+      </div>
+      {% endif %}
+    </section>
+
+    <footer class="rodape">
+      <span>PRESTOLABOR · CONTROLE DE FLUXO SST</span>
+      <span>O técnico pode disponibilizar o ciclo ou devolver correções solicitadas pelo responsável pela análise.</span>
+    </footer>
+  </main>
+</body>
+</html>

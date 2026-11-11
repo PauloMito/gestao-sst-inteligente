@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prestolabor | Gestão SST</title>
+  <link rel="stylesheet" href="../static/css/index.css">
+</head>
+
+<body>
+
+  <header>
+    <h1>Prestolabor</h1>
+    <p>Sistema de acompanhamento de empresas</p>
+
+    <nav aria-label="Navegação dos painéis">
+      <a href="{{ url_for('painel_tecnico') }}">
+        Acessar painel do Técnico
+      </a>
+
+      <a href="{{ url_for('painel_adenilson') }}">
+        Acessar painel do Adenilson
+      </a>
+    </nav>
+  </header>
+
+  <hr>
+
+  <main>
+
+    <section>
+      <h2>Cadastro de empresa</h2>
+
+      <form method="POST" action="{{ url_for('inicio') }}">
+
+        <input type="hidden" name="acao" value="cadastrar">
+
+        <p>
+          <label for="empresa">Nome da empresa:</label><br>
+          <input type="text" id="empresa" name="empresa" required>
+        </p>
+
+        <p>
+          <label for="cnpj">CNPJ:</label><br>
+          <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" required>
+        </p>
+
+        <p>
+          <label for="tecnico">Técnico responsável:</label><br>
+          <input type="text" id="tecnico" name="tecnico" required>
+        </p>
+
+        <p>
+          <label for="unidade">Unidade da Prestolabor:</label><br>
+          <input type="text" id="unidade" name="unidade" required>
+        </p>
+
+        <p>
+          <label for="vencimento">Data de vencimento:</label><br>
+          <input type="date" id="vencimento" name="vencimento" required>
+        </p>
+
+        <button type="submit">Cadastrar empresa</button>
+
+      </form>
+    </section>
+
+    <hr>
+
+    <section>
+      <h2>Empresas cadastradas</h2>
+
+      {% if mensagem %}
+      <p role="status">{{ mensagem }}</p>
+      {% endif %}
+
+      {% for empresa in empresas %}
+
+      <article>
+
+        <h3>{{ empresa.nome }}</h3>
+
+        <p>
+          <strong>ID:</strong>
+          {{ empresa.id }}
+        </p>
+
+        <p>
+          <strong>CNPJ:</strong>
+          {{ empresa.cnpj }}
+        </p>
+
+        <p>
+          <strong>Técnico:</strong>
+          {{ empresa.tecnico }}
+        </p>
+
+        <p>
+          <strong>Unidade:</strong>
+          {{ empresa.unidade }}
+        </p>
+
+        <p>
+          <strong>Vencimento:</strong>
+          {{ empresa.vencimento }}
+        </p>
+
+        <p>
+          <strong>Status:</strong>
+          {{ empresa.status }}
+        </p>
+
+        <section>
+          <h4>Ações disponíveis</h4>
+
+          {% for codigo, rotulo, usuario in acoes_por_status[empresa.status] %}
+
+          <form method="POST" action="{{ url_for('inicio') }}">
+
+            <input type="hidden" name="acao" value="transicionar">
+            <input type="hidden" name="empresa_id" value="{{ empresa.id }}">
+            <input type="hidden" name="acao_status" value="{{ codigo }}">
+            <input type="hidden" name="usuario" value="{{ usuario }}">
+
+            <button type="submit">{{ rotulo }}</button>
+
+          </form>
+
+          {% else %}
+
+          <p>Não há outras ações disponíveis.</p>
+
+          {% endfor %}
+        </section>
+
+        <section>
+          <h4>Excluir registro</h4>
+
+          <form method="POST" action="{{ url_for('excluir_empresa', empresa_id=empresa.id) }}"
+            onsubmit="return confirm('Tem certeza de que deseja excluir esta empresa?');">
+            <button type="submit">Excluir empresa</button>
+          </form>
+        </section>
+
+        {% if empresa.status == "Avaliação concluída, produção dos documentos liberada" %}
+        <p><strong>Fluxo concluído.</strong></p>
+        {% endif %}
+
+        <hr>
+
+      </article>
+
+      {% else %}
+
+      <p>Nenhuma empresa cadastrada.</p>
+
+      {% endfor %}
+
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Prestolabor - Ambiente de testes</p>
+  </footer>
+
+</body>
+
+</html>

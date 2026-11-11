@@ -1,0 +1,447 @@
+:root {
+      --fundo: #f3f5f9;
+      --branco: #ffffff;
+      --texto: #202b3c;
+      --texto-secundario: #6b778a;
+      --borda: #e2e7ef;
+      --azul: #2457a7;
+      --azul-hover: #194680;
+      --verde-fundo: #e3f7eb;
+      --verde-texto: #17663b;
+      --amarelo-fundo: #fff0d9;
+      --amarelo-texto: #8a4708;
+      --cinza-fundo: #edf0f5;
+      --cinza-texto: #4e5b70;
+      --sombra: 0 5px 22px rgba(30, 45, 70, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .cabecalho {
+      background: #172b4d;
+      color: white;
+      padding: 25px 32px;
+    }
+
+    .cabecalho-conteudo {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .identidade h1 {
+      margin: 0 0 7px;
+      font-size: 25px;
+      font-weight: 700;
+    }
+
+    .identidade p {
+      margin: 0;
+      color: #c8d4e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .marca {
+      color: #dce8fa;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .container {
+      width: min(1500px, calc(100% - 40px));
+      margin: 28px auto 50px;
+    }
+
+    .introducao {
+      margin-bottom: 22px;
+    }
+
+    .introducao h2 {
+      margin: 0 0 8px;
+      font-size: 21px;
+    }
+
+    .introducao p {
+      margin: 0;
+      color: var(--texto-secundario);
+      line-height: 1.6;
+    }
+
+    .indicadores {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .indicador {
+      background: var(--branco);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      padding: 21px;
+      box-shadow: var(--sombra);
+    }
+
+    .indicador-label {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--texto-secundario);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .indicador-valor {
+      display: block;
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .indicador-total {
+      border-top: 4px solid #64748b;
+    }
+
+    .indicador-pendente {
+      border-top: 4px solid #d59b26;
+    }
+
+    .indicador-correcao {
+      border-top: 4px solid #d97706;
+    }
+
+    .painel {
+      overflow: hidden;
+      background: var(--branco);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      box-shadow: var(--sombra);
+    }
+
+    .painel-cabecalho {
+      padding: 22px 22px 18px;
+      border-bottom: 1px solid var(--borda);
+    }
+
+    .painel-titulo {
+      margin: 0 0 7px;
+      font-size: 18px;
+    }
+
+    .painel-descricao {
+      margin: 0;
+      color: var(--texto-secundario);
+      line-height: 1.5;
+    }
+
+    .filtros {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 17px 22px;
+      border-bottom: 1px solid var(--borda);
+    }
+
+    .campo-busca {
+      width: 100%;
+      max-width: 480px;
+      padding: 12px 14px;
+      background: #fff;
+      border: 1px solid #ccd4e0;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .campo-busca:focus {
+      border-color: var(--azul);
+      box-shadow: 0 0 0 3px rgba(36, 87, 167, 0.12);
+    }
+
+    .botao-limpar {
+      padding: 11px 14px;
+      background: #fff;
+      color: var(--texto);
+      border: 1px solid var(--borda);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .botao-limpar:hover {
+      background: #f5f7fa;
+    }
+
+    .resumo-tabela {
+      padding: 13px 22px;
+      color: var(--texto-secundario);
+      font-size: 12px;
+      border-bottom: 1px solid var(--borda);
+    }
+
+    .tabela-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1050px;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    thead {
+      background: #f8f9fc;
+    }
+
+    th {
+      padding: 15px 16px;
+      color: #526076;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 17px 16px;
+      border-top: 1px solid #edf0f5;
+      vertical-align: middle;
+    }
+
+    tbody tr:hover {
+      background: #fafbfd;
+    }
+
+    .empresa-nome {
+      display: block;
+      max-width: 280px;
+      font-weight: 700;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .empresa-cnpj {
+      display: block;
+      margin-top: 5px;
+      color: var(--texto-secundario);
+      font-size: 12px;
+    }
+
+    .texto-secundario {
+      color: var(--texto-secundario);
+      line-height: 1.5;
+    }
+
+    .data-vencimento {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status {
+      display: inline-block;
+      max-width: 300px;
+      padding: 9px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .status-pendente {
+      color: #805b09;
+      background: #fff4cf;
+      border: 1px solid #f0df9b;
+    }
+
+    .status-correcao {
+      color: var(--amarelo-texto);
+      background: var(--amarelo-fundo);
+      border: 1px solid #f0d0a3;
+    }
+
+    .status-outro {
+      color: var(--cinza-texto);
+      background: var(--cinza-fundo);
+      border: 1px solid #dce2eb;
+    }
+
+    .status-disponivel {
+      color: #1757a6;
+      background: #e7f0ff;
+      border: 1px solid #c9dcff;
+    }
+
+    .status-analise {
+      color: #6941a5;
+      background: #f1eaff;
+      border: 1px solid #dfd0fa;
+    }
+
+    .status-concluido {
+      color: var(--verde-texto);
+      background: var(--verde-fundo);
+      border: 1px solid #bde8ce;
+    }
+
+    .acoes {
+      min-width: 230px;
+    }
+
+    .form-acao {
+      margin: 0;
+    }
+
+    .botao-acao {
+      width: 100%;
+      max-width: 235px;
+      padding: 11px 13px;
+      border: 0;
+      border-radius: 7px;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .botao-liberar {
+      background: #187044;
+    }
+
+    .botao-liberar:hover {
+      background: #105833;
+    }
+
+    .botao-devolver {
+      background: var(--azul);
+    }
+
+    .botao-devolver:hover {
+      background: var(--azul-hover);
+    }
+
+    .botao-acao:focus-visible,
+    .botao-limpar:focus-visible {
+      outline: 3px solid #9bbdf5;
+      outline-offset: 3px;
+    }
+
+    .sem-acao {
+      display: block;
+      max-width: 220px;
+      color: var(--texto-secundario);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .sem-resultados {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--texto-secundario);
+      line-height: 1.6;
+    }
+
+    .sem-resultados strong {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--texto);
+      font-size: 15px;
+    }
+
+    .rodape {
+      padding: 17px 22px;
+      color: var(--texto-secundario);
+      font-size: 12px;
+      line-height: 1.6;
+      border-top: 1px solid var(--borda);
+    }
+
+    .oculto {
+      display: none !important;
+    }
+
+    @media (max-width: 850px) {
+      .cabecalho {
+        padding: 22px 20px;
+      }
+
+      .cabecalho-conteudo {
+        align-items: flex-start;
+      }
+
+      .identidade h1 {
+        font-size: 21px;
+      }
+
+      .marca {
+        display: none;
+      }
+
+      .container {
+        width: calc(100% - 24px);
+        margin-top: 20px;
+      }
+
+      .indicadores {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .indicador {
+        padding: 17px;
+      }
+
+      .indicador-valor {
+        font-size: 28px;
+      }
+
+      .filtros {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 15px;
+      }
+
+      .campo-busca {
+        max-width: none;
+      }
+
+      .botao-limpar {
+        width: 100%;
+      }
+
+      .painel-cabecalho {
+        padding: 18px 15px;
+      }
+
+      .resumo-tabela {
+        padding: 12px 15px;
+      }
+    }
+
+    [hidden] {
+      display: none !important;
+    }
